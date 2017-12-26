@@ -93,10 +93,10 @@ def xp2jpy(event, param1)
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
       "#{event.user.mention} <:xpchan01:391497596461645824>\
-＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
+＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.round(4).to_s(:delimited)} 円だよ〜"
     else
-      _xp_jpy = xp_jpy.round(8)
-      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
+      _xp_jpy = xp_jpy
+      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy.round(4).to_s(:delimited)} 円だよ〜"
     end
   message ||= ":satisfied:"
   event.respond message
@@ -236,7 +236,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(event, sentence, model:)
+def blue_mix_translate(_event, sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
@@ -250,7 +250,7 @@ def blue_mix_translate(event, sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO:エラー対応
+  # TODO: エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
